@@ -1,0 +1,11 @@
+{
+  "name": "sb-todo-list-card",
+  "author": "SmartBirdSolution",
+  "description": "sb-todo-list-card",
+  "keywords": ["card", "lovelace", "custom-card"],
+  "version": "1.0.0",
+  "content_in_root": true,
+  "zip_release": false,
+  "filename": "sb-todo-list-card.js",
+  "type": "lovelace"
+}
