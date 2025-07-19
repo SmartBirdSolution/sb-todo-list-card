@@ -77,6 +77,17 @@ class SbTodoListCard extends HTMLElement {
               transition: background 0.3s ease;
             }
 
+            .sb-select:hover,
+            .sb-select:focus {
+              background: var(--divider-color, #ccc);
+              outline: none;
+              border-color: var(--mdc-theme-primary, #6200ee);
+            }
+
+            .sb-select option {
+              background: #3b3b3b;
+              color: var(--primary-text-color, #000); /* Explicit text color */
+            }
             .sb-select:disabled,
             .sb-input:disabled {
               background: var(--input-disabled-fill-color, #3a3a3a);
@@ -93,23 +104,28 @@ class SbTodoListCard extends HTMLElement {
               margin: 0 auto;
             }
 
-            /* MAIN CONTENT LAYOUT */
-            .content {
-              display: flex;
-              justify-content: space-between;
-              gap: 2em;
-              padding: 1em;
-              overflow-y: auto;
-              height: 50%;
-            }
-
             .sb-card {
+              display: flex;
               width: 50vw;
               max-width: none;
               min-width: 300px;
-              
-              height: 100%;
+              overflow: hidden;      /* Prevent overflow */
+              height: 800px;
               margin: 0 auto;
+              flex-direction: column;  /* So .content and other sections stack */
+              overflow: hidden;
+              box-sizing: border-box;
+            }
+
+            .content {
+              display: flex;
+              justify-content: space-between;
+              align-items: stretch;
+              gap: 2em;
+              padding: 1em;
+              flex: 0 0 65%;
+              overflow-y: auto;
+              box-sizing: border-box;
             }
 
             .sb-clear-completed-container {
@@ -119,6 +135,7 @@ class SbTodoListCard extends HTMLElement {
               height: 50px; /* fits button height */
               padding: 0 1em;
             }
+
 
             @media (max-width: 768px) {
               ha-card,
@@ -136,11 +153,6 @@ class SbTodoListCard extends HTMLElement {
                 overflow-y: auto;       /* Scrollable if needed */
                 flex-direction: column;
                 gap: 1em;
-              }
-
-              .sb-clear-completed-container,
-              .actions {
-                flex-shrink: 0;         /* Don't let these collapse */
               }
             }
           `;
@@ -372,8 +384,10 @@ class SbTodoListCard extends HTMLElement {
         line.style.flexDirection = "column";
 
         // 🔁 Background color based on due date
-        if (item.due_datetime || item.due_date) {
-            const due = new Date(item.due_datetime || item.due_date);
+        if (item.due_datetime ) {
+            const timestamp = item.due_datetime;
+            const tsNum = Number(timestamp);
+            const due = new Date(tsNum * 1000)
             const now = new Date();
             const diffMs = due.getTime() - now.getTime();
             const diffDays = diffMs / (1000 * 60 * 60 * 24);
@@ -453,8 +467,8 @@ class SbTodoListCard extends HTMLElement {
         details.style.padding = "0";
         details.style.listStyleType = "disc";
 
-        if (item.due_datetime || item.due_date) {
-            const due = new Date(item.due_datetime || item.due_date);
+        if (item.due_datetime) {
+            const due = new Date(item.due_datetime * 1000);
             const formatted = due.toLocaleString("en-US", {
                 month: "2-digit",
                 day: "2-digit",
@@ -589,8 +603,8 @@ class SbTodoListCard extends HTMLElement {
         dialog.style.maxWidth = "400px";
         dialog.style.border = "1px solid #97989c"
         dialog.style.borderRadius = "6px";
-        dialog.style.background = "var(--ha-card-background,var(--card-background-color,#fff))"
-
+        dialog.style.background = "#000"
+        dialog.style.style = "#fff"
 
         // === Task Name
         const nameWrapper = document.createElement("div");
@@ -615,11 +629,13 @@ class SbTodoListCard extends HTMLElement {
         dialog.dateInput.type = "date";
         dialog.dateInput.className = "sb-input";
         dialog.dateInput.style.flex = "1";
+        dialog.dateInput.placeholder="dd/mm/yyyy";
 
         dialog.timeInput = document.createElement("input");
         dialog.timeInput.type = "time";
         dialog.timeInput.className = "sb-input";
         dialog.timeInput.style.flex = "1";
+        dialog.dateInput.placeholder="--:-- --";
 
         datetimeRow.appendChild(dialog.dateInput);
         datetimeRow.appendChild(dialog.timeInput);
@@ -743,32 +759,40 @@ class SbTodoListCard extends HTMLElement {
         dialog.saveBtn.onclick = () => {
             const due_date = dialog.dateInput.value;
             const due_time = dialog.timeInput.value;
-            const due_datetime = due_date && due_time ? `${due_date}T${due_time}` : due_date || null;
+
+            let due_timestamp = null;
+            if (due_date) {
+                const datetimeStr = due_time ? `${due_date}T${due_time}` : `${due_date}T00:00`; // fallback to midnight if no time
+                const dateObj = new Date(datetimeStr);
+                if (!isNaN(dateObj.getTime())) {
+                    due_timestamp = Math.floor(dateObj.getTime() / 1000); // Convert to seconds
+                }
+            }
 
             const amount = dialog.periodAmount.value?.trim() ?? "";
+            const periodStr = amount !== "" && Number.isInteger(Number(amount)) && Number(amount) > 0
+                ? `${amount}${dialog.periodUnit.value}`
+                : null;
 
-            const periodStr = amount !== "" && Number.isInteger(Number(amount)) &&  Number(amount) > 0 ? `${amount}${dialog.periodUnit.value}` : null;
+            const serviceData = {
+                entity_id: entityId,
+                due_datetime: due_timestamp,  // send as seconds since epoch
+                requiring: dialog.requiringCheck.checked,
+                period: periodStr,
+            };
 
             if (isNew) {
-                this._hass.callService("sb_todo", "add_item", {
-                    entity_id: entityId,
-                    item: dialog.nameInput.value.trim(),
-                    due_datetime,
-                    requiring: dialog.requiringCheck.checked,
-                    period: periodStr,
-                });
+                serviceData.item = dialog.nameInput.value.trim();
+                this._hass.callService("sb_todo", "add_item", serviceData);
             } else {
-                this._hass.callService("sb_todo", "update_item", {
-                    entity_id: entityId,
-                    item: item.summary,
-                    rename: dialog.nameInput.value.trim(),
-                    due_datetime,
-                    requiring: dialog.requiringCheck.checked,
-                    period: periodStr,
-                });
+                serviceData.item = item.summary;
+                serviceData.rename = dialog.nameInput.value.trim();
+                this._hass.callService("sb_todo", "update_item", serviceData);
             }
+
             dialog.close();
         };
+
     }
 
     getCardSize() {
