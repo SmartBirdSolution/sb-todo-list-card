@@ -543,7 +543,8 @@ class SbTodoListCard extends HTMLElement {
             this._addListDialog.style.maxWidth = "400px";
             this._addListDialog.style.border = "1px solid #97989c"
             this._addListDialog.style.borderRadius = "6px";
-            this._addListDialog.style.background = "var(--ha-card-background,var(--card-background-color,#fff))"
+            this._addListDialog.style.background = "#000"
+            this._addListDialog.style.color = "#fff"
 
             const input = document.createElement("input");
             input.type = "text";
@@ -585,8 +586,10 @@ class SbTodoListCard extends HTMLElement {
             cancelBtn.className = 'sb-button';
             cancelBtn.addEventListener("click", () => this._addListDialog.close());
 
-            buttonsContainer.appendChild(cancelBtn);
+
             buttonsContainer.appendChild(saveBtn);
+            buttonsContainer.appendChild(cancelBtn);
+
 
             this._addListDialog.appendChild(buttonsContainer);
             this.shadowRoot.appendChild(this._addListDialog);
@@ -604,7 +607,7 @@ class SbTodoListCard extends HTMLElement {
         dialog.style.border = "1px solid #97989c"
         dialog.style.borderRadius = "6px";
         dialog.style.background = "#000"
-        dialog.style.style = "#fff"
+        dialog.style.color = "#fff"
 
         // === Task Name
         const nameWrapper = document.createElement("div");
