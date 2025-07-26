@@ -469,6 +469,23 @@ class SbTodoListCard extends HTMLElement {
 
         if (item.due_datetime) {
             const due = new Date(item.due_datetime * 1000);
+            const now = new Date();
+
+            const msDiff = due.getTime() - now.getTime();
+            const daysLeft = Math.ceil(msDiff / (1000 * 60 * 60 * 24));
+
+            // ⏳ Countdown display
+            const liCountdown = document.createElement("li");
+            if (daysLeft > 0) {
+                liCountdown.textContent = `⏳ Due in ${daysLeft} day${daysLeft !== 1 ? "s" : ""}`;
+            } else if (daysLeft === 0) {
+                liCountdown.textContent = `⏳ Due today`;
+            } else {
+                liCountdown.textContent = `⚠️ Overdue by ${Math.abs(daysLeft)} day${Math.abs(daysLeft) !== 1 ? "s" : ""}`;
+            }
+            details.appendChild(liCountdown);
+
+            // 📅 Due date display
             const formatted = due.toLocaleString("en-US", {
                 month: "2-digit",
                 day: "2-digit",
@@ -477,9 +494,9 @@ class SbTodoListCard extends HTMLElement {
                 minute: "2-digit",
                 hour12: true,
             });
-            const li = document.createElement("li");
-            li.textContent = `📅 Due: ${formatted}`;
-            details.appendChild(li);
+            const liDate = document.createElement("li");
+            liDate.textContent = `📅 Due: ${formatted}`;
+            details.appendChild(liDate);
         }
 
         if (item.requiring) {
@@ -719,9 +736,12 @@ class SbTodoListCard extends HTMLElement {
         if (item) {
             dialog.nameInput.value = item.summary;
             if (item.due_datetime) {
-                const [date, time] = item.due_datetime.split("T");
+                const dt = new Date(item.due_datetime * 1000); // convert from seconds to ms
+                const isoStr = dt.toISOString(); // e.g. "2025-07-23T14:30:00.000Z"
+                const [date, time] = isoStr.split("T");
                 dialog.dateInput.value = date;
-                dialog.timeInput.value = time?.slice(0, 5) ?? "";
+                dialog.timeInput.value = time?.slice(0, 5) ?? ""; // only HH:mm
+
             } else {
                 dialog.dateInput.value = "";
                 dialog.timeInput.value = "";
