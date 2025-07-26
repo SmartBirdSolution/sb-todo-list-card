@@ -736,11 +736,20 @@ class SbTodoListCard extends HTMLElement {
         if (item) {
             dialog.nameInput.value = item.summary;
             if (item.due_datetime) {
-                const dt = new Date(item.due_datetime * 1000); // convert from seconds to ms
-                const isoStr = dt.toISOString(); // e.g. "2025-07-23T14:30:00.000Z"
-                const [date, time] = isoStr.split("T");
-                dialog.dateInput.value = date;
-                dialog.timeInput.value = time?.slice(0, 5) ?? ""; // only HH:mm
+                const dt = new Date(item.due_datetime * 1000); // Convert to local Date object
+
+                // Convert to local date string (yyyy-mm-dd)
+                const localDate = dt.toLocaleDateString('en-CA'); // 'en-CA' gives YYYY-MM-DD format
+
+                // Convert to local time string (HH:MM)
+                const localTime = dt.toLocaleTimeString('en-US', {
+                    hour12: false,
+                    hour: "2-digit",
+                    minute: "2-digit"
+                });
+
+                dialog.dateInput.value = localDate;
+                dialog.timeInput.value = localTime;
 
             } else {
                 dialog.dateInput.value = "";
