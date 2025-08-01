@@ -242,10 +242,8 @@ class SbTodoListCard extends HTMLElement {
             justify-content: center;
             gap: 1em;
             padding: 0 0.5em 3em 0.5em;
-            background: var(--card-background-color, #000); /* ensure it blends with the card */
             flex-shrink: 0;
             box-sizing: border-box;
-          
             /* Combine height of content + 1px border */
           }
 
