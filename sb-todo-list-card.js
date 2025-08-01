@@ -6,169 +6,278 @@ class SbTodoListCard extends HTMLElement {
 
         const style = document.createElement("style");
         style.textContent = `
-            /* BUTTONS */
-            .sb-button {
-              background: var(--primary-color);
-              color: white;
-              padding: 0.5em 1em;
-              border: none;
-              border-radius: 4px;
-              cursor: pointer;
-            }
+          /* BUTTONS */
+          .sb-button {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5em 1em;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+          }
 
-            .sb-button:hover {
-              opacity: 0.9;
-            }
+          .sb-button:hover {
+            opacity: 0.9;
+          }
 
-            .sb-button-danger {
-              color: var(--error-color);
-              background: none;
-              border: none;
-              cursor: pointer;
-            }
+          .sb-button-danger {
+            color: var(--error-color, #FF2400);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9em;      
+            padding: 0.3em;       
+          }
 
-            /* INPUTS */
-            .sb-input {
-              width: 100%;
-              padding: 0.6em 0.8em;
-              font-size: 1em;
-              border: 1px solid var(--divider-color, #ccc);
-              border-radius: 4px;
-              background: var(--mdc-select-fill-color, #f5f5f5);
-              color: var(--primary-text-color, #000);
-              box-sizing: border-box;
-              transition: border-color 0.2s ease;
-            }
+          /* INPUTS */
+          .sb-input {
+            width: 100%;
+            padding: 0.6em 0.8em;
+            font-size: 1em;
+            border: 1px solid var(--divider-color, #ccc);
+            border-radius: 4px;
+            background: var(--mdc-select-fill-color, #f5f5f5);
+            color: var(--primary-text-color, #000);
+            box-sizing: border-box;
+            transition: border-color 0.2s ease;
+          }
 
-            .sb-input:focus {
-              border-color: var(--mdc-theme-primary, var(--primary-color, #6200ee));
-              outline: none;
-            }
+          .sb-input:focus {
+            border-color: var(--mdc-theme-primary, var(--primary-color, #6200ee));
+            outline: none;
+          }
 
-            .sb-row {
-              display: flex;
-              gap: 0.5em;
-              margin-bottom: 1em;
-            }
+          .sb-row {
+            display: flex;
+            gap: 0.5em;
+            margin-bottom: 1em;
+          }
 
-            .sb-row.vertical {
-              flex-direction: column;
-            }
+          .sb-row.vertical {
+            flex-direction: column;
+          }
 
-            .sb-label {
-              font-size: 0.9em;
-              color: var(--secondary-text-color, #666);
-              margin-bottom: 0.2em;
-            }
+          .sb-label {
+            font-size: 0.9em;
+            color: var(--secondary-text-color, #666);
+            margin-bottom: 0.2em;
+          }
 
-            .sb-checkbox-row {
-              display: flex;
-              align-items: center;
-              gap: 0.5em;
-            }
+          .sb-checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+          }
 
-            .sb-select {
-              padding: 0.5em;
-              border: 1px solid var(--divider-color, #ccc);
-              border-radius: 4px;
-              background: var(--divider-color, #ccc);
-              font-size: 1em;
-              color: var(--primary-text-color, #000);
-              transition: background 0.3s ease;
-            }
+          .sb-select {
+            padding: 0.5em;
+            border: 1px solid var(--divider-color, #ccc);
+            border-radius: 4px;
+            background: var(--divider-color, #ccc);
+            font-size: 1em;
+            color: var(--primary-text-color, #000);
+            transition: background 0.3s ease;
+          }
 
-            .sb-select:hover,
-            .sb-select:focus {
-              background: var(--divider-color, #ccc);
-              outline: none;
-              border-color: var(--mdc-theme-primary, #6200ee);
-            }
+          .sb-select:hover,
+          .sb-select:focus {
+            background: var(--divider-color, #ccc);
+            outline: none;
+            border-color: var(--mdc-theme-primary, #6200ee);
+          }
 
-            .sb-select option {
-              background: #3b3b3b;
-              color: var(--primary-text-color, #000); /* Explicit text color */
-            }
-            .sb-select:disabled,
-            .sb-input:disabled {
-              background: var(--input-disabled-fill-color, #3a3a3a);
-              color: var(--disabled-text-color, #999);
-              cursor: not-allowed;
-            }
+          .sb-select option {
+            background: #3b3b3b;
+            color: var(--primary-text-color, #000); /* Explicit text color */
+          }
+          .sb-select:disabled,
+          .sb-input:disabled {
+            background: var(--input-disabled-fill-color, #3a3a3a);
+            color: var(--disabled-text-color, #999);
+            cursor: not-allowed;
+          }
 
-            /* RESPONSIVE CARD WIDTH */
-            ha-card {
-              width: 90vw;
-              max-width: 800px;
-              min-width: 300px;
-              height: 100%;
-              margin: 0 auto;
-            }
+        .checkbox-wrapper-46 input[type="checkbox"] {
+          display: none;
+          visibility: hidden;
+        }
+        .checkbox-wrapper-46 .cbx {
+          margin: auto;
+          user-select: none;
+          cursor: pointer;
+        }
+        .checkbox-wrapper-46 .cbx span {
+          display: inline-block;
+          vertical-align: middle;
+          transform: translate3d(0, 0, 0);
+        }
+        .checkbox-wrapper-46 .cbx span:first-child {
+          position: relative;
+          width: 18px;
+          height: 18px;
+          border-radius: 3px;
+          transform: scale(1);
+          vertical-align: middle;
+          border: 1px solid #9098A9;
+          transition: all 0.2s ease;
+        }
+        .checkbox-wrapper-46 .cbx span:first-child svg {
+          position: absolute;
+          top: 3px;
+          left: 2px;
+          fill: none;
+          stroke: #FFFFFF;
+          stroke-width: 2;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+          stroke-dasharray: 16px;
+          stroke-dashoffset: 16px;
+          transition: all 0.3s ease;
+          transition-delay: 0.1s;
+          transform: translate3d(0, 0, 0);
+        }
+        .checkbox-wrapper-46 .cbx span:first-child:before {
+          content: "";
+          width: 100%;
+          height: 100%;
+          background: #03a9f4;
+          display: block;
+          transform: scale(0);
+          opacity: 1;
+          border-radius: 50%;
+        }
+        .checkbox-wrapper-46 .cbx span:last-child {
+          padding-left: 8px;
+        }
+        .checkbox-wrapper-46 .cbx:hover span:first-child {
+          border-color: #03a9f4;
+        }
+        .checkbox-wrapper-46 .inp-cbx:checked + .cbx span:first-child {
+          background: #03a9f4;
+          border-color: #03a9f4;
+          animation: wave-46 0.4s ease;
+        }
+        .checkbox-wrapper-46 .inp-cbx:checked + .cbx span:first-child svg {
+          stroke-dashoffset: 0;
+        }
+        .checkbox-wrapper-46 .inp-cbx:checked + .cbx span:first-child:before {
+          transform: scale(3.5);
+          opacity: 0;
+          transition: all 0.6s ease;
+        }
+        // @keyframes wave-46 {
+        // 50% {
+        //     transform: scale(0.9);
+        // }
+        }
+
+        .sb-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em;
+        padding: 0.5em 1em;
+        border-bottom: 1px solid #ccc;
+        flex-shrink: 0; /* tabs height fixed to content */
+        }
+
+        /* Tab buttons */
+        .sb-tab-button {
+          display: flex;
+          align-items: center;
+          padding: 0.5em 1em;
+          border: none;
+          background: none;
+          cursor: pointer;
+          color: white;
+          font-size: 1.2em;
+          font-weight: normal;
+          border-bottom: 2px solid transparent;
+        }
+
+        .sb-tab-button.selected {
+          font-weight: bold;
+          border-bottom: 2px solid var(--primary-color);
+        }
+
+          /* RESPONSIVE CARD WIDTH */
+          ha-card {
+            width: 90vw;
+            max-width: 800px;
+            min-width: 300px;
+            height: 100%;
+            margin: 0 auto;
+          }
 
             .sb-card {
-              display: flex;
-              width: 50vw;
-              max-width: none;
-              min-width: 300px;
-              overflow: hidden;      /* Prevent overflow */
-              height: 800px;
-              margin: 0 auto;
-              flex-direction: column;  /* So .content and other sections stack */
-              overflow: hidden;
-              box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            height: 800px; /* or use vh if you want viewport height */
+            width: 100%;
+            max-width: none;
+            min-width: 300px;
+            overflow: hidden; /* prevent card overflow */
+            margin: 0 auto;
+            box-sizing: border-box;
             }
 
             .content {
-              display: flex;
-              justify-content: space-between;
-              align-items: stretch;
-              gap: 2em;
-              padding: 1em;
-              flex: 0 0 65%;
+              flex: 1 1 auto;
               overflow-y: auto;
+              padding: 1em;
+              padding-bottom: 0; /* prevent it from pushing actions down */
               box-sizing: border-box;
+              border-bottom: 1px solid #ccc;
             }
 
-            .sb-clear-completed-container {
+          .sb-clear-completed-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            height: 50px; /* fits button height */
+            padding: 0 1em;
+          }
+
+          .actions {
+            display: flex;
+            justify-content: center;
+            gap: 1em;
+            padding: 0 0.5em 3em 0.5em;
+            background: var(--card-background-color, #000); /* ensure it blends with the card */
+            flex-shrink: 0;
+            box-sizing: border-box;
+          
+            /* Combine height of content + 1px border */
+          }
+
+          @media (max-width: 768px) {
+            ha-card,
+            .sb-card {
+              height: 700px;         /* Full viewport height */
+              overflow: hidden;      /* Prevent overflow */
               display: flex;
-              justify-content: flex-end;
-              align-items: center;
-              height: 50px; /* fits button height */
-              padding: 0 1em;
+              width: 90vw;
+              flex-direction: column;
             }
 
-
-            @media (max-width: 768px) {
-              ha-card,
-              .sb-card {
-                height: 100vh;         /* Full viewport height */
-                overflow: hidden;      /* Prevent overflow */
-                display: flex;
-                width: 90vw;
-                flex-direction: column;
-              }
-
-              .content {
-                flex: 0 0 60vh;         /* Fixed height for content */
-                max-height: 60vh;
-                overflow-y: auto;       /* Scrollable if needed */
-                flex-direction: column;
-                gap: 1em;
-              }
+            .content {
+              flex: 0 0 550px;         /* Fixed height for content */
+              max-height: 60vh;
+              overflow-y: auto;       /* Scrollable if needed */
+              flex-direction: column;
+              gap: 1em;
             }
-          `;
+          }
+        `;
 
         this.shadowRoot.appendChild(style);
         this.selectedIndex = 0;
 
         this.card = document.createElement("ha-card");
-        this.card.header = this.config.title || "Todo Lists";
+        //   this.card.header = this.config.title || "Todo Lists";
         this.card.className = "sb-card";
 
         this.tabContainer = document.createElement("div");
-        this.tabContainer.style.display = "flex";
-        this.tabContainer.style.gap = "1em";
-        this.tabContainer.style.padding = "0.5em 1em";
-        this.tabContainer.style.borderBottom = "1px solid #ccc";
+        this.tabContainer.className = "sb-tabs";
         this.card.appendChild(this.tabContainer);
 
         this.content = document.createElement("div");
@@ -185,29 +294,22 @@ class SbTodoListCard extends HTMLElement {
         this.card.appendChild(this.clearCompletedContainer);
 
 
-        // Create the line element
-        this.separatorLine = document.createElement("div");
-        this.separatorLine.style.position = "absolute";
-        this.separatorLine.style.bottom = "calc(10% + 30px)";
-        this.separatorLine.style.left = "0";
-        this.separatorLine.style.width = "100%";
-        this.separatorLine.style.height = "1px";
-        this.separatorLine.style.backgroundColor = "white";
-        this.separatorLine.style.opacity = "0.6";
+        //   // Create the line element
+        //   this.separatorLine = document.createElement("div");
+        //   this.separatorLine.style.position = "absolute";
+        //   this.separatorLine.style.bottom = "calc(10% + 30px)";
+        //   this.separatorLine.style.left = "0";
+        //   this.separatorLine.style.width = "100%";
+        //   this.separatorLine.style.height = "1px";
+        //   this.separatorLine.style.backgroundColor = "white";
+        //   this.separatorLine.style.opacity = "0.6";
 
-        // Add the line to the card (same container as actions)
-        this.card.appendChild(this.separatorLine);
+        //   // Add the line to the card (same container as actions)
+        //   this.card.appendChild(this.separatorLine);
 
 
         this.actions = document.createElement("div");
-        this.actions.style.position = "absolute";
-        this.actions.style.bottom = "5%";
-        this.actions.style.left = "0";
-        this.actions.style.width = "100%";
-        this.actions.style.display = "flex";
-        this.actions.style.height = "auto";
-        this.actions.style.justifyContent = "center";
-        this.actions.style.gap = "1em";
+        this.actions.className = "actions";
         // this.actions.style.borderTop = "1px solid #ccc";
         this.card.appendChild(this.actions);
 
@@ -243,16 +345,7 @@ class SbTodoListCard extends HTMLElement {
 
         this.entities.forEach((entity, index) => {
             const tab = document.createElement("button");
-            tab.style.display = "flex";
-            tab.style.alignItems = "center";
-            tab.style.padding = "0.5em 1em";
-            tab.style.border = "none";
-            tab.style.color = "white";
-            tab.style.borderBottom =
-                index === this.selectedIndex ? "2px solid var(--primary-color)" : "2px solid transparent";
-            tab.style.background = "none";
-            tab.style.cursor = "pointer";
-            tab.style.fontWeight = index === this.selectedIndex ? "bold" : "normal";
+            tab.className = "sb-tab-button" + (index === this.selectedIndex ? " selected" : "");
 
             // Use display name (friendly_name attribute) for label
             const labelSpan = document.createElement("span");
@@ -287,6 +380,7 @@ class SbTodoListCard extends HTMLElement {
             // Delete button with confirmation
             const delBtn = document.createElement("button");
             delBtn.textContent = "✖";
+
             delBtn.title = `Delete list ${labelSpan.textContent}`;
             delBtn.className = 'sb-button-danger';
             // delBtn.style.marginLeft = "0.5em";
@@ -321,7 +415,6 @@ class SbTodoListCard extends HTMLElement {
 
     _renderSelectedListTasks() {
         this.content.innerHTML = "";
-        this.clearCompletedContainer.innerHTML = "";  // clear previous button
 
         if (!this.entities.length) {
             this.content.textContent = "No todo lists available.";
@@ -335,43 +428,78 @@ class SbTodoListCard extends HTMLElement {
         const activeTasks = items.filter(item => item.status !== "completed");
         const completedTasks = items.filter(item => item.status === "completed");
 
-        // Show clear completed button only if there are completed tasks
-        if (completedTasks.length > 0) {
-            const clearCompletedBtn = document.createElement("button");
-            clearCompletedBtn.textContent = "🧹 Clear Completed";
-            clearCompletedBtn.className = 'sb-button';
-            // clearCompletedBtn.style.background = "var(--primary-color)";
-            // clearCompletedBtn.style.color = "white";
-            // clearCompletedBtn.style.padding = "0.5em 1em";
-            // clearCompletedBtn.style.border = "none";
-            // clearCompletedBtn.style.borderRadius = "4px";
-            // clearCompletedBtn.style.cursor = "pointer";
-
-            clearCompletedBtn.addEventListener("click", async () => {
-                if (confirm("Remove all completed items?")) {
-                    await this._hass.callService("sb_todo", "remove_completed_items", {
-                        entity_id: entity.entity_id,
-                    });
-                    setTimeout(() => this._refreshLists(), 500);
-                }
-            });
-
-            this.clearCompletedContainer.appendChild(clearCompletedBtn);
-        }
-
-        const section = (titleText, tasks) => {
+        const section = (titleText, tasks, isCompleted = false) => {
             const section = document.createElement("div");
             section.style.flex = "1";
+            section.style.display = "flex";
+            section.style.flexDirection = "column";
+
+            const header = document.createElement("div");
+            header.style.display = "flex";
+            header.style.justifyContent = "space-between";
+            header.style.alignItems = "center";
+
             const title = document.createElement("h3");
             title.textContent = titleText;
-            section.appendChild(title);
-            tasks.forEach(item => section.appendChild(this._renderTask(item, entity.entity_id)));
+            header.appendChild(title);
+
+            let toggleButton;
+            let taskContainer = document.createElement("div");
+            taskContainer.className = "completed-container";
+            taskContainer.style.display = isCompleted && !this.showCompleted ? "none" : "block";
+
+            if (isCompleted) {
+                this.showCompleted = this.showCompleted ?? true;
+                toggleButton = document.createElement("button");
+
+                toggleButton.textContent = this.showCompleted ? "︽" : "︾";
+                toggleButton.style.fontSize = "1.5em";
+                toggleButton.style.padding = "0.2em 0.4em"; // small padding to prevent squishing
+                toggleButton.style.flexShrink = "0";
+                toggleButton.className = "sb-button";
+                toggleButton.addEventListener("click", () => {
+                    this.showCompleted = !this.showCompleted;
+                    toggleButton.textContent = this.showCompleted ? "︽" : "︾";
+                    this._renderSelectedListTasks();
+                });
+                header.appendChild(toggleButton);
+            }
+
+            section.appendChild(header);
+
+            tasks.forEach(item => {
+                const taskEl = this._renderTask(item, entity.entity_id);
+                taskContainer.appendChild(taskEl);
+            });
+
+            // Add clear completed button inside completed section
+            if (isCompleted && this.showCompleted && completedTasks.length > 0) {
+                const clearCompletedBtn = document.createElement("button");
+                clearCompletedBtn.textContent = "🧹 Clear Completed";
+                clearCompletedBtn.className = 'sb-button';
+                clearCompletedBtn.style.alignSelf = "center";
+                clearCompletedBtn.style.marginTop = "1em";
+                clearCompletedBtn.addEventListener("click", async () => {
+                    if (confirm("Remove all completed items?")) {
+                        await this._hass.callService("sb_todo", "remove_completed_items", {
+                            entity_id: entity.entity_id,
+                        });
+                        setTimeout(() => this._refreshLists(), 500);
+                    }
+                });
+                taskContainer.appendChild(clearCompletedBtn);
+            }
+
+            section.appendChild(taskContainer);
             return section;
         };
 
         this.content.appendChild(section("To Do", activeTasks));
-        this.content.appendChild(section("Completed", completedTasks));
+        if (completedTasks.length > 0) {
+            this.content.appendChild(section("Completed", completedTasks, true));
+        }
     }
+
 
 
     _renderTask(item, entityId) {
@@ -382,6 +510,7 @@ class SbTodoListCard extends HTMLElement {
         line.style.padding = "0.5em";
         line.style.display = "flex";
         line.style.flexDirection = "column";
+        line.style.background = "#2e2e2e"
 
         // 🔁 Background color based on due date
         if (item.due_datetime ) {
@@ -414,11 +543,17 @@ class SbTodoListCard extends HTMLElement {
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "✖";
         deleteButton.title = `Delete item "${item.summary}"`;
-        deleteButton.style.color = "var(--error-color)";
+        deleteButton.style.color = "var(--error-color, #FF2400)";
         deleteButton.style.background = "none";
         deleteButton.style.border = "none";
         deleteButton.style.cursor = "pointer";
         deleteButton.style.marginRight = "0.5em";
+        deleteButton.style.fontSize = "1.5em";        // Increased size
+        deleteButton.style.lineHeight = "1";          // Optional for alignment
+        deleteButton.style.padding = "0.3em";         // Optional spacing
+        deleteButton.style.alignSelf = "center";
+        deleteButton.style.position = "relative";
+        deleteButton.style.top = "1px";
         deleteButton.addEventListener("click", async () => {
             if (confirm(`Delete item "${item.summary}"?`)) {
                 await this._hass.callService("sb_todo", "remove_item", {
@@ -436,6 +571,7 @@ class SbTodoListCard extends HTMLElement {
         name.style.wordBreak = "break-word";
         name.style.padding = "0 0.5em";
         name.style.cursor = "pointer";
+        name.style.fontSize = "1.3em";
         name.textContent = item.summary;
         if (item.status === "completed") {
             name.style.textDecoration = "line-through";
@@ -444,20 +580,46 @@ class SbTodoListCard extends HTMLElement {
         name.addEventListener("dblclick", () => this._showEditDialog(item, entityId));
 
         // ✅ Done / Undo button
-        const toggleBtn = document.createElement("button");
-        toggleBtn.textContent = item.status === "completed" ? "Undo" : "Done";
-        toggleBtn.className = "sb-button";
-        toggleBtn.addEventListener("click", () => {
+        const checkboxWrapper = document.createElement("div");
+        checkboxWrapper.className = "checkbox-wrapper-46";
+
+        const checkboxId = `cbx-${Math.random().toString(36).substring(2, 8)}`;
+
+        const input = document.createElement("input");
+        input.className = "inp-cbx";
+        input.type = "checkbox";
+        input.id = checkboxId;
+        input.checked = item.status === "completed";
+        input.title = input.checked ? "Mark as not done" : "Mark as done";
+        input.addEventListener("change", () => {
             this._hass.callService("sb_todo", "update_item", {
                 entity_id: entityId,
                 item: item.summary,
-                status: item.status === "completed" ? "needs_action" : "completed",
+                status: input.checked ? "completed" : "needs_action",
             });
         });
 
+        const label = document.createElement("label");
+        label.className = "cbx";
+        label.setAttribute("for", checkboxId);
+        label.innerHTML = `
+        <span>
+          <svg width="12px" height="10px" viewBox="0 0 12 10">
+            <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+          </svg>
+        </span>
+        <span></span>
+      `;
+
+        checkboxWrapper.appendChild(input);
+        checkboxWrapper.appendChild(label);
+
+        const customCheck = document.createElement("span");
+        customCheck.className = "checkmark";
+
         topRow.appendChild(deleteButton);
         topRow.appendChild(name);
-        topRow.appendChild(toggleBtn);
+        topRow.appendChild(checkboxWrapper);
 
         // ===== BOTTOM ROW: Parameters (bulleted, multiline) =====
         const details = document.createElement("ul");
@@ -526,7 +688,8 @@ class SbTodoListCard extends HTMLElement {
 
         if (this.entities.length) {
             const addTaskBtn = document.createElement("button");
-            addTaskBtn.textContent = "➕ Add Task";
+            addTaskBtn.textContent = "Add Task";
+            addTaskBtn.style.fontSize = "1.3em";
             addTaskBtn.style.marginRight = "1em";
             addTaskBtn.className = 'sb-button';
             addTaskBtn.addEventListener("click", () => this._showAddDialog());
@@ -534,7 +697,8 @@ class SbTodoListCard extends HTMLElement {
         }
 
         const addListBtn = document.createElement("button");
-        addListBtn.textContent = "➕ Add New List";
+        addListBtn.textContent = "Add List";
+        addListBtn.style.fontSize = "1.3em";
         addListBtn.className = 'sb-button';
         addListBtn.addEventListener("click", () => this._showAddListDialog());
         this.actions.appendChild(addListBtn);
